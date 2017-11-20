@@ -50,7 +50,7 @@ namespace TestRollbarOfficialLibrary
                 Level = ErrorLevel.Error,
                 Server = new Server()
                 {
-                    Root = "C:\\MyProjects\\Test"
+                    Root = "C:\\MyProjects\\Test\\TestRollbarOfficialLibrary\\"
                 }
             };
             var payload = new Payload(accessToken, data);
