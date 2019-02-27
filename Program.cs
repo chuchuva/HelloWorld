@@ -1,23 +1,20 @@
-using RollbarDotNet;
+﻿using Rollbar;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TestRollbarOfficialLibrary
+namespace TestRollbar
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Rollbar.Init(new RollbarConfig
-            {
-                AccessToken = "<put token here>",
-                Environment = "production"
-            });
-
-
+            RollbarLocator.RollbarInstance.Configure(
+                new RollbarConfig("<put token here>")
+                {
+                    Server = new Rollbar.DTOs.Server
+                    {
+                        Root = "D:\\Projects\\Test\\TestRollbar\\"
+                    }
+                });
 
             try
             {
@@ -25,8 +22,7 @@ namespace TestRollbarOfficialLibrary
             }
             catch (System.Exception ex)
             {
-                //Rollbar.Report(ex);
-                LogException(ex);
+                RollbarLocator.RollbarInstance.Error(ex);
             }
             Console.WriteLine("Press Enter");
             Console.ReadLine();
@@ -40,27 +36,6 @@ namespace TestRollbarOfficialLibrary
 
         static public void LogException(System.Exception ex)
         {
-            string accessToken = "<put token here>";
-            if (string.IsNullOrEmpty(accessToken))
-                return;
-            string environment = "test";
-            var body = new Body(ex);
-            var data = new Data(environment, body)
-            {
-                Level = ErrorLevel.Error,
-                Server = new Server()
-                {
-                    Root = "C:\\MyProjects\\Test\\TestRollbarOfficialLibrary\\"
-                }
-            };
-            var payload = new Payload(accessToken, data);
-            var client = new RollbarClient(new RollbarConfig
-            {
-                AccessToken = accessToken,
-                Environment = environment
-            });
-            client.PostItem(payload);
         }
-
     }
 }
